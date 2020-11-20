@@ -20,3 +20,21 @@ Good luck!
 ## Running
 
     make giftcardreader; ./giftcardreader 1 examplefile.gft
+
+## File descriptions
+
+### examplefile.gft
+
+Normal.
+
+### examplefile-edited-but-valid.gft
+
+No bugs or overflows. Edited text.
+
+### examplefile3.gft
+
+Lies about file size a bit in byte 0. Reports 16 bytes short.
+
+### examplefile4.gft
+
+Buffer over-read. CWE 126. Last string is too small.
