@@ -184,6 +184,7 @@ struct this_gift_card *gift_card_reader(FILE *input_fd) {
 		struct gift_card_data *gcd_ptr;
 		/* JAC: Why aren't return types checked? */
 		fread(&ret_val->num_bytes, 4,1, input_fd);
+        printf("File reports that it's 0x%02x or %d bytes large...\n", ret_val->num_bytes,ret_val->num_bytes);
 
 		// Make something the size of the rest and read it in
 		ptr = malloc(ret_val->num_bytes);
