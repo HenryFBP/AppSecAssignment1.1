@@ -16,3 +16,7 @@ not do as well in the actual goals of the assignment as you were
 expecting or hoping.
 
 Good luck!
+
+## Running
+
+    make giftcardreader; ./giftcardreader 1 examplefile.gft
