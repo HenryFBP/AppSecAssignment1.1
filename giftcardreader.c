@@ -194,7 +194,7 @@ struct this_gift_card *gift_card_reader(FILE *input_fd) {
 		gcd_ptr = ret_val->gift_card_data = malloc(sizeof(struct gift_card_data));
 		gcd_ptr->merchant_id = ptr;
 		ptr += 32;	
-//		printf("VD: %d\n",(int)ptr - (int) gcd_ptr->merchant_id);
+		printf("VD: %d\n",(int)ptr - (int) gcd_ptr->merchant_id);
 		gcd_ptr->customer_id = ptr;
 		ptr += 32;	
 		/* JAC: Something seems off here... */
@@ -214,12 +214,12 @@ struct this_gift_card *gift_card_reader(FILE *input_fd) {
 			gcp_ptr = malloc(sizeof(struct gift_card_program));
 
 			gcrd_ptr->record_size_in_bytes = *((char *)ptr);
-            //printf("rec at %x, %d bytes\n", ptr - optr, gcrd_ptr->record_size_in_bytes); 
+            printf("rec at %x, %d bytes\n", ptr - optr, gcrd_ptr->record_size_in_bytes); 
 			ptr += 4;	
-			//printf("record_data: %d\n",gcrd_ptr->record_size_in_bytes);
+			printf("record_data: %d\n",gcrd_ptr->record_size_in_bytes);
 			gcrd_ptr->type_of_record = *((char *)ptr);
 			ptr += 4;	
-            //printf("type of rec: %d\n", gcrd_ptr->type_of_record);
+            printf("type of rec: %d\n", gcrd_ptr->type_of_record);
 
 			// amount change
 			if (gcrd_ptr->type_of_record == 1) {
@@ -259,16 +259,34 @@ struct this_gift_card *gift_card_reader(FILE *input_fd) {
 // BDG: why not a local variable here?
 struct this_gift_card *thisone;
 
+void usage(char** argv){
+    printf("Incorrect usage!\n");
+    printf("Usage: %s <option(1,2)> <filepath>\n",argv[0]);
+}
+
 int main(int argc, char **argv) {
-    // BDG: no argument checking?
+
+    if(argc < 3){
+        usage(argv);
+    }
+
 	FILE *input_fd = fopen(argv[2],"r");
+    char option = argv[1][0];
+
     if(input_fd == NULL) {
+        usage(argv);
         printf("Error! File %s does not exist.",argv[2]);
         exit(1);
     }
+
+    if ((option != '1') && (option != '2')) {
+        usage(argv);
+        exit(1);
+    }
+
 	thisone = gift_card_reader(input_fd);
-	if (argv[1][0] == '1') print_gift_card_info(thisone);
-    else if (argv[1][0] == '2') gift_card_json(thisone);
+	if (option == '1') print_gift_card_info(thisone);
+    else if (option == '2') gift_card_json(thisone);
 
 	return 0;
 }
