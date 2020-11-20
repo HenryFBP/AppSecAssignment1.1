@@ -21,6 +21,14 @@ Good luck!
 
     make giftcardreader; ./giftcardreader 1 examplefile.gft
 
+## Editing files
+
+You can use "HxD" to edit files in hex.
+
+## Fuzzing
+
+TODO
+
 ## File descriptions
 
 ### examplefile.gft
