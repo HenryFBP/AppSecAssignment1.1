@@ -6,13 +6,13 @@ target1: #no dependencies, try `make target1` in terminal
 	echo "cool build command"
 
 giftcardreader: giftcardreader.c
-	gcc -o giftcardreader giftcardreader.c
+	gcc -g -o giftcardreader giftcardreader.c
 
 testgiftcardreader: giftcardreader
 	./giftcardreader 1 examplefile.gft
 
 giftcardexamplewriter:
-	gcc -o giftcardexamplewriter giftcardexamplewriter.c
+	gcc -g -o giftcardexamplewriter giftcardexamplewriter.c
 
 testgiftcardexamplewriter: giftcardexamplewriter
 	./giftcardexamplewriter
