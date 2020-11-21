@@ -17,6 +17,34 @@ expecting or hoping.
 
 Good luck!
 
+## Debugging
+
+    gdb -tui --args giftcardreader.exe 1 examplefile.gft
+    
+    OR
+
+    gdb --args giftcardreader.exe 1 examplefile.gft
+
+    b main
+
+    b gift_card_reader
+
+    info breakpoints
+
+    run
+
+    list
+
+    p argv[2]
+
+    s
+
+    ...
+
+After ptr is populated:
+
+    p /s (char*) ptr
+
 ## Running
 
     make giftcardreader; ./giftcardreader 1 examplefile.gft
