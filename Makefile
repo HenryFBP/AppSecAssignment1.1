@@ -1,3 +1,5 @@
+all: giftcardreader giftcardexamplewriter
+
 target2: target1 # depends on target1, will do everything that it requires
 	echo "target2"
 
