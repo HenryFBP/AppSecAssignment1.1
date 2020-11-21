@@ -183,28 +183,36 @@ struct this_gift_card *gift_card_reader(FILE *input_fd) {
 
 		struct gift_card_data *gcd_ptr;
 		/* JAC: Why aren't return types checked? */
-		fread(&ret_val->num_bytes, 4,1, input_fd);
-        printf("File reports that it's 0x%02x or %d bytes large...\n", ret_val->num_bytes,ret_val->num_bytes);
+		fread(&ret_val->num_bytes, 4, 1, input_fd);
+
+        printf("First 4 bytes we read were 0x%02x or %d\n", 
+            ret_val->num_bytes, ret_val->num_bytes);
 
 		// Make something the size of the rest and read it in
+        printf("About to allocate %d bytes because I trust this file :)\n", ret_val->num_bytes);
 		ptr = malloc(ret_val->num_bytes);
+
 		fread(ptr, ret_val->num_bytes, 1, input_fd);
 
+        // original pointer to data read from file. Subtract 4 because we advanced by 4.
         optr = ptr-4;
 
 		gcd_ptr = ret_val->gift_card_data = malloc(sizeof(struct gift_card_data));
-		gcd_ptr->merchant_id = ptr;
-		ptr += 32;	
+		
+        // contains 64 bytes, 2 fields, the website and the store name
+        gcd_ptr->merchant_id = ptr;
+
+		ptr += 32;
 		printf("VD: %d\n",(int)ptr - (int) gcd_ptr->merchant_id);
 		gcd_ptr->customer_id = ptr;
-		ptr += 32;	
+		ptr += 32;
 		/* JAC: Something seems off here... */
 		gcd_ptr->number_of_gift_card_records = *((char *)ptr);
 		ptr += 4;
 
 		gcd_ptr->gift_card_record_data = (void *)malloc(gcd_ptr->number_of_gift_card_records*sizeof(void*));
 
-		// Now ptr points at the gift card recrod data
+		// Now ptr points at the gift card record data
 		for (int i=0; i<=gcd_ptr->number_of_gift_card_records; i++){
 			//printf("i: %d\n",i);
 			struct gift_card_record_data *gcrd_ptr;
