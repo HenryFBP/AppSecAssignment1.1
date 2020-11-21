@@ -189,7 +189,7 @@ struct this_gift_card *gift_card_reader(FILE *input_fd) {
             ret_val->num_bytes, ret_val->num_bytes);
 
 		// Make something the size of the rest and read it in
-        printf("About to allocate %d bytes because I trust this file :)\n", ret_val->num_bytes);
+        printf("About to allocate %u bytes because I trust this file :)\n", ret_val->num_bytes);
 		ptr = malloc(ret_val->num_bytes);
 
 		fread(ptr, ret_val->num_bytes, 1, input_fd);
