@@ -20,9 +20,10 @@ Good luck!
 ## Notes
 
 -   `cat <file> | hexdump -C`
--   `hexdump fuzz-output/giftcardreader/crashes/id\:000003\,sig\:11\,src\:000000\,op\:havoc\,rep\:16 -C`
+-   `hexdump fuzz-output/giftcardreader/crashes/id\:000003* -C`
 -   `hexdump -C data/examplefile.gft`
--   `diff <(hexdump fuzz-output/giftcardreader/crashes/id\:000003\,sig\:11\,src\:000000\,op\:havoc\,rep\:16 -C) <(hexdump -C data/examplefile.gft) | colordiff`
+-   `diff <(hexdump fuzz-output/giftcardreader/crashes/id\:000003* -C) <(hexdump -C data/examplefile.gft) | colordiff`
+-   `for f in fuzz-output/giftcardreader/crashes/*; do echo $f; hexdump -C $f; done | less`
 
 ## Links
 
@@ -50,6 +51,15 @@ You can use "HxD" to edit files in hex.
 And read the `Makefile`!
 
 ## Debugging
+
+-   <https://sourceware.org/gdb/onlinedocs/gdb/Continuing-and-Stepping.html>
+-   <http://www.gdbtutorial.com/gdb-breakpoints-example>
+-   <https://stackoverflow.com/questions/14609577/print-character-array-to-file-in-gdb>
+
+-   `n` will go to the next line in the current frame.
+-   `s` will go into the function call.
+
+Note: The below commands are different on Windows.
 
     gdb -tui --args giftcardreader.exe 1 data/examplefile.gft
     
