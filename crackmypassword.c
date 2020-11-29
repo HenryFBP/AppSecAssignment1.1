@@ -8,6 +8,7 @@ void process_password()
     char enterpassword[2];
     printf("Do you want to enter a password?\n (Y/N) > ");
     scanf("%s", enterpassword);
+    // scanf("%2s", enterpassword); //What you should do to fix buffer overflow
 
     if (strcmp(enterpassword, "N") == 0)
         return;
@@ -19,6 +20,7 @@ void process_password()
     char password[256];
     printf("Enter your password: \n > ");
     scanf("%s", password);
+    // scanf("%256s", password); //What you should do to fix buffer overflow
 
     if (strcmp(password, PASSWORD) == 0)
     {
