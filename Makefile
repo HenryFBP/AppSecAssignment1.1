@@ -1,3 +1,9 @@
+CC = afl-gcc #change to 'gcc' if you're not fuzzing
+
+ifeq (, $(shell which $(CC)))
+$(error "No $(CC) in $(PATH), read README.md")
+endif
+
 all: giftcardreader.exe giftcardexamplewriter.exe
 
 clean:
@@ -11,13 +17,13 @@ target1: #no dependencies, try `make target1` in terminal
 	echo "cool build command"
 
 giftcardreader.exe: giftcardreader.c
-	gcc -g -o giftcardreader.exe giftcardreader.c
+	$(CC) -g -o giftcardreader.exe giftcardreader.c
 
 testgiftcardreader: giftcardreader.exe
 	./giftcardreader.exe 1 data/examplefile.gft
 
 giftcardexamplewriter.exe:
-	gcc -g -o giftcardexamplewriter.exe giftcardexamplewriter.c
+	$(CC) -g -o giftcardexamplewriter.exe giftcardexamplewriter.c
 
 testgiftcardexamplewriter: giftcardexamplewriter.exe
 	./giftcardexamplewriter.exe
