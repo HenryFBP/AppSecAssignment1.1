@@ -1,4 +1,5 @@
 CC = afl-gcc #change to 'gcc' if you're not fuzzing
+FUZZER = afl-fuzz
 CFLAGS = -g
 
 ifeq (, $(shell which $(CC)))
@@ -19,6 +20,10 @@ target1: #no dependencies, try `make target1` in terminal
 
 crackmypassword.exe: crackmypassword.c
 	$(CC) $(CFLAGS) -o crackmypassword.exe crackmypassword.c
+
+fuzz_crackmypassword: crackmypassword.exe
+	mkdir -p fuzz-output/crackmypassword
+	$(FUZZER) -i ./fuzz-input/crackmypassword -o ./fuzz-output/crackmypassword ./crackmypassword.exe
 
 giftcardreader.exe: giftcardreader.c
 	$(CC) $(CFLAGS) -o giftcardreader.exe giftcardreader.c

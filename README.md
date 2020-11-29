@@ -17,6 +17,14 @@ expecting or hoping.
 
 Good luck!
 
+## Notes
+
+-   `cat <file> | hexdump -C`
+
+## Links
+
+-   <https://x9security.com/fuzzing-explained-with-afl/>
+
 ## Building
 
     make clean all
@@ -31,7 +39,9 @@ You can use "HxD" to edit files in hex.
 
 ## Fuzzing
 
-TODO
+    make fuzz_crackmypassword
+
+And read the `Makefile`!
 
 ## Debugging
 
