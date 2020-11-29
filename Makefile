@@ -11,7 +11,7 @@ giftcardreader: giftcardreader.c
 	gcc -g -o giftcardreader giftcardreader.c
 
 testgiftcardreader: giftcardreader
-	./giftcardreader 1 examplefile.gft
+	./giftcardreader 1 data/examplefile.gft
 
 giftcardexamplewriter:
 	gcc -g -o giftcardexamplewriter giftcardexamplewriter.c

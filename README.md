@@ -19,11 +19,11 @@ Good luck!
 
 ## Debugging
 
-    gdb -tui --args giftcardreader.exe 1 examplefile.gft
+    gdb -tui --args giftcardreader.exe 1 data/examplefile.gft
     
     OR
 
-    gdb --args giftcardreader.exe 1 examplefile.gft
+    gdb --args giftcardreader.exe 1 data/examplefile.gft
 
     b gift_card_reader
 
@@ -88,7 +88,7 @@ After ptr is populated:
 
 ## Running
 
-    make giftcardreader; ./giftcardreader 1 examplefile.gft
+    make giftcardreader; ./giftcardreader 1 data/examplefile.gft
 
 ## Editing files
 
