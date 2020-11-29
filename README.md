@@ -17,6 +17,22 @@ expecting or hoping.
 
 Good luck!
 
+## Building
+
+    make clean all
+
+## Running
+
+    make giftcardreader; ./giftcardreader 1 data/examplefile.gft
+
+## Editing files
+
+You can use "HxD" to edit files in hex.
+
+## Fuzzing
+
+TODO
+
 ## Debugging
 
     gdb -tui --args giftcardreader.exe 1 data/examplefile.gft
@@ -85,18 +101,6 @@ Good luck!
 After ptr is populated:
 
     p /s (char*) ptr
-
-## Running
-
-    make giftcardreader; ./giftcardreader 1 data/examplefile.gft
-
-## Editing files
-
-You can use "HxD" to edit files in hex.
-
-## Fuzzing
-
-TODO
 
 ## File descriptions
 
