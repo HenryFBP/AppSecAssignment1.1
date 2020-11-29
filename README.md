@@ -20,10 +20,14 @@ Good luck!
 ## Notes
 
 -   `cat <file> | hexdump -C`
+-   `hexdump fuzz-output/giftcardreader/crashes/id\:000003\,sig\:11\,src\:000000\,op\:havoc\,rep\:16 -C`
+-   `hexdump -C data/examplefile.gft`
+-   `diff <(hexdump fuzz-output/giftcardreader/crashes/id\:000003\,sig\:11\,src\:000000\,op\:havoc\,rep\:16 -C) <(hexdump -C data/examplefile.gft) | colordiff`
 
 ## Links
 
 -   <https://x9security.com/fuzzing-explained-with-afl/>
+-   <https://afl-1.readthedocs.io/en/latest/fuzzing.html>
 
 ## Building
 
@@ -40,6 +44,8 @@ You can use "HxD" to edit files in hex.
 ## Fuzzing
 
     make fuzz_crackmypassword
+
+    make fuzz_giftcardreader
 
 And read the `Makefile`!
 
