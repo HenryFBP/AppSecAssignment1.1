@@ -1,0 +1,11 @@
+language: c
+os: linux
+dist: xenial
+compiler: gcc
+before_script:
+  - make
+  - echo "Woohoo! Compiled!"
+
+script:
+  - make testgiftcardreader
+  - echo "Woohoo! Program ran!"
