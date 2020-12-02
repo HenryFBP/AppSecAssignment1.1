@@ -203,11 +203,11 @@ struct this_gift_card *gift_card_reader(FILE *giftcardfp)
     int real_file_size = ftell(giftcardfp);
     rewind(giftcardfp);
 
-    printf("Measured file size is %d bytes.", real_file_size);
+    printf("Measured file size is %d bytes.\n", real_file_size);
 
     if (real_file_size < 4)
     { //Minimum file size
-        printf("File size < 4 bytes. Halting!");
+        printf("File size < 4 bytes. Halting!\n");
         exit(VALIDATION_ABORT_CODE);
     }
 
@@ -224,13 +224,13 @@ struct this_gift_card *gift_card_reader(FILE *giftcardfp)
 
         if (ret_val->num_bytes != real_file_size)
         {
-            printf("File is LYING about its size.");
-            printf("File says it's %d bytes but is actually %d bytes.", ret_val->num_bytes, real_file_size);
+            printf("File is LYING about its size!\n");
+            printf("File says it's %d bytes but is actually %d bytes.\n", ret_val->num_bytes, real_file_size);
             exit(VALIDATION_ABORT_CODE);
         }
         else
         {
-            printf("File is telling the truth about its size.");
+            printf("File is telling the truth about its size.\n");
         }
 
         // Make something the size of the rest and read it in
@@ -339,7 +339,7 @@ int main(int argc, char **argv)
     if (giftcardfp == NULL)
     {
         usage(argv);
-        printf("Error! File %s does not exist.", argv[2]);
+        printf("Error! File %s does not exist.\n", argv[2]);
         exit(1);
     }
 
