@@ -6,7 +6,7 @@
  * Modification Date: 8 July 2020
  */
 
-// The purpose of this app is to read in gift card data.  The format of a gift 
+// The purpose of this app is to read in gift card data.  The format of a gift
 // card looks like this:
 //
 // thisgiftcard:
@@ -17,7 +17,7 @@
 //
 // giftcardrecorddata:
 //   num_bytes[32 bits]
-//   type_of_record 
+//   type_of_record
 //   gift_card_amount_change OR gift_card_message
 //
 // giftcardamountchange:  Adds or removes money from the card
@@ -26,7 +26,7 @@
 //
 // giftcardmessage:
 //   just a null terminated C string.
-// 
+//
 // giftcardprogram: (BETA)
 //   message[32 bytes]
 //   program[256 bytes]
@@ -64,34 +64,36 @@
 //           about that comment that says programs must be "VALID"??
 #include <stdlib.h>
 
-struct this_gift_card {
+struct this_gift_card
+{
 	int num_bytes;
 	void *gift_card_data;
-}; 
+};
 
-struct gift_card_data {
+struct gift_card_data
+{
 	char *merchant_id; // always points to 32 bytes of data
-	char *customer_id;// always points to 32 bytes of data
+	char *customer_id; // always points to 32 bytes of data
 	int number_of_gift_card_records;
 	void **gift_card_record_data; // many can exist here.
 };
 
-
-struct gift_card_record_data {
+struct gift_card_record_data
+{
 	int record_size_in_bytes; // size of this entry, including this field.
-	int type_of_record; // 1 for amount change, 2 for message
-	void *actual_record; // polymorphism
+	int type_of_record;		  // 1 for amount change, 2 for message
+	void *actual_record;	  // polymorphism
 };
 
-
-
-struct gift_card_amount_change {
+struct gift_card_amount_change
+{
 	int amount_added;
 	// always 32 bytes.  Only appears if amount_added is positive
-	char *actual_signature; 
+	char *actual_signature;
 };
 
-struct gift_card_program {
-    char *message; // 32 bytes
-    unsigned char *program; // 128 bytes
+struct gift_card_program
+{
+	char *message;			// 32 bytes
+	unsigned char *program; // 128 bytes
 };
