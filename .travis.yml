@@ -8,4 +8,12 @@ before_script:
 
 script:
   - make testgiftcardreader
-  - echo "Woohoo! Program ran!"
+  - echo "Woohoo! Program ran with normal file!"
+
+  - |
+    echo "Testing all inputs in data/*"
+    for file in data/*; do
+      echo "Testing $file"
+      ./giftcardreader.exe 1 $file
+      ./giftcardreader.exe 2 $file
+    done
