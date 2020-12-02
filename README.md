@@ -17,6 +17,8 @@ expecting or hoping.
 
 Good luck!
 
+[![Build Status](https://travis-ci.com/HenryFBP/AppSecAssignment1.1.svg?token=mHPrA98N3yAoVQKG6EzR&branch=master)](https://travis-ci.com/HenryFBP/AppSecAssignment1.1)
+
 ## Notes
 
 -   `cat <file> | hexdump -C`
@@ -31,6 +33,8 @@ Good luck!
 -   <https://afl-1.readthedocs.io/en/latest/fuzzing.html>
 
 ## Building
+
+Use Linux or WSL.
 
     make clean all
 

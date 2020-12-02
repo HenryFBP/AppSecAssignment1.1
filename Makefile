@@ -3,7 +3,8 @@ FUZZER = afl-fuzz
 CFLAGS = -g
 
 ifeq (, $(shell which $(CC)))
-$(error "No $(CC) in $(PATH), read README.md")
+$(warning "No $(CC) in PATH, read README.md. Using gcc.")
+CC = gcc
 endif
 
 all: giftcardreader.exe giftcardexamplewriter.exe crackmypassword.exe
