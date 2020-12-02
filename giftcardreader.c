@@ -6,6 +6,8 @@
  * Date: 8 July 2020
  */
 
+#define VALIDATION_ABORT_CODE 0 // Set to zero to prevent Travis or afl-fuzz from thinking this is a crash.
+
 
 #include "giftcard.h"
 
@@ -66,13 +68,13 @@ done:
     return;
 }
 
-void print_gift_card_info(struct this_gift_card *thisone) {
-	struct gift_card_data *gcd_ptr;
-	struct gift_card_record_data *gcrd_ptr;
-	struct gift_card_amount_change *gcac_ptr;
-    struct gift_card_program *gcp_ptr;
+void print_gift_card_info(struct this_gift_card* gift_card) {
+	struct gift_card_data* gcd_ptr;
+	struct gift_card_record_data* gcrd_ptr;
+	struct gift_card_amount_change* gcac_ptr;
+    struct gift_card_program* gcp_ptr;
 
-	gcd_ptr = thisone->gift_card_data;
+	gcd_ptr = gift_card->gift_card_data;
 	printf("   Merchant ID: %32.32s\n",gcd_ptr->merchant_id);
 	printf("   Customer ID: %32.32s\n",gcd_ptr->customer_id);
 	printf("   Num records: %d\n",gcd_ptr->number_of_gift_card_records);
@@ -98,19 +100,19 @@ void print_gift_card_info(struct this_gift_card *thisone) {
             animate(gcp_ptr->message, gcp_ptr->program);
 		}
 	}
-	printf("  Total value: %d\n\n",get_gift_card_value(thisone));
+	printf("  Total value: %d\n\n",get_gift_card_value(gift_card));
 }
 
 // Added to support web functionalities
-void gift_card_json(struct this_gift_card *thisone) {
+void gift_card_json(struct this_gift_card *gift_card) {
     struct gift_card_data *gcd_ptr;
     struct gift_card_record_data *gcrd_ptr;
     struct gift_card_amount_change *gcac_ptr;
-    gcd_ptr = thisone->gift_card_data;
+    gcd_ptr = gift_card->gift_card_data;
     printf("{\n");
     printf("  \"merchant_id\": \"%32.32s\",\n", gcd_ptr->merchant_id);
     printf("  \"customer_id\": \"%32.32s\",\n", gcd_ptr->customer_id);
-    printf("  \"total_value\": %d,\n", get_gift_card_value(thisone));
+    printf("  \"total_value\": %d,\n", get_gift_card_value(gift_card));
     printf("  \"records\": [\n");
 	for(int i=0;i<gcd_ptr->number_of_gift_card_records; i++) {
         gcrd_ptr = (struct gift_card_record_data *) gcd_ptr->gift_card_record_data[i];
@@ -151,13 +153,13 @@ void gift_card_json(struct this_gift_card *thisone) {
     printf("}\n");
 }
 
-int get_gift_card_value(struct this_gift_card *thisone) {
+int get_gift_card_value(struct this_gift_card *gift_card) {
 	struct gift_card_data *gcd_ptr;
 	struct gift_card_record_data *gcrd_ptr;
 	struct gift_card_amount_change *gcac_ptr;
 	int ret_count = 0;
 
-	gcd_ptr = thisone->gift_card_data;
+	gcd_ptr = gift_card->gift_card_data;
 	for(int i=0;i<gcd_ptr->number_of_gift_card_records; i++) {
   		gcrd_ptr = (struct gift_card_record_data *) gcd_ptr->gift_card_record_data[i];
 		if (gcrd_ptr->type_of_record == 1) {
@@ -170,29 +172,49 @@ int get_gift_card_value(struct this_gift_card *thisone) {
 
 
 
-/* JAC: input_fd is misleading... It's a FILE type, not a fd */
-struct this_gift_card *gift_card_reader(FILE *input_fd) {
+struct this_gift_card *gift_card_reader(FILE *giftcardfp) {
 
 	struct this_gift_card *ret_val = malloc(sizeof(struct this_gift_card));
 
     void *optr;
 	void *ptr;
+    
+    // How long is the file ACTUALLY?
+    fseek(giftcardfp, 0L, SEEK_END);
+    int real_file_size = ftell(giftcardfp);
+    rewind(giftcardfp);
+
+    printf("Measured file size is %d bytes.",real_file_size);
+
+    if(real_file_size < 4) { //Minimum file size
+        printf("File size < 4 bytes. Halting!");
+        exit(VALIDATION_ABORT_CODE);
+    }
+
 
 	// Loop to do the whole file
-	while (!feof(input_fd)) {
+	while (!feof(giftcardfp)) {
 
 		struct gift_card_data *gcd_ptr;
 		/* JAC: Why aren't return types checked? */
-		fread(&ret_val->num_bytes, 4, 1, input_fd);
+		fread(&ret_val->num_bytes, 4, 1, giftcardfp);
 
         printf("First 4 bytes we read were 0x%02x or %d\n", 
             ret_val->num_bytes, ret_val->num_bytes);
+
+        if(ret_val->num_bytes != real_file_size) {
+            printf("File is LYING about its size.");
+            printf("File says it's %d bytes but is actually %d bytes.",ret_val->num_bytes, real_file_size);
+            exit(VALIDATION_ABORT_CODE);
+        } else {
+            printf("File is telling the truth about its size.");
+        }
 
 		// Make something the size of the rest and read it in
         printf("About to allocate %u bytes because I trust this file :)\n", ret_val->num_bytes);
 		ptr = malloc(ret_val->num_bytes);
 
-		fread(ptr, ret_val->num_bytes, 1, input_fd);
+		fread(ptr, ret_val->num_bytes, 1, giftcardfp);
 
         // original pointer to data read from file. Subtract 4 because we advanced by 4.
         optr = ptr-4;
@@ -266,7 +288,7 @@ struct this_gift_card *gift_card_reader(FILE *input_fd) {
 }
 
 // BDG: why not a local variable here?
-struct this_gift_card *thisone;
+struct this_gift_card *gift_card;
 
 void usage(char** argv){
     printf("Incorrect usage!\n");
@@ -277,12 +299,13 @@ int main(int argc, char **argv) {
 
     if(argc < 3){
         usage(argv);
+        exit(1);
     }
 
-	FILE *input_fd = fopen(argv[2],"r");
+	FILE *giftcardfp = fopen(argv[2],"r");
     char option = argv[1][0];
 
-    if(input_fd == NULL) {
+    if(giftcardfp == NULL) {
         usage(argv);
         printf("Error! File %s does not exist.",argv[2]);
         exit(1);
@@ -293,9 +316,11 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-	thisone = gift_card_reader(input_fd);
-	if (option == '1') print_gift_card_info(thisone);
-    else if (option == '2') gift_card_json(thisone);
+	gift_card = gift_card_reader(giftcardfp);
+	if (option == '1') {
+        print_gift_card_info(gift_card);}
+    else if (option == '2') {
+        gift_card_json(gift_card);}
 
 	return 0;
 }

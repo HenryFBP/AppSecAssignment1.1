@@ -62,7 +62,7 @@
 
 // BDG note: this program structure looks complex. And I'm worried
 //           about that comment that says programs must be "VALID"??
-#include<stdlib.h>
+#include <stdlib.h>
 
 struct this_gift_card {
 	int num_bytes;
