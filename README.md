@@ -34,6 +34,8 @@ Good luck!
 
 ## Building
 
+Use Linux or WSL.
+
     make clean all
 
 ## Running
