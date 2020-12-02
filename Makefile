@@ -3,7 +3,7 @@ FUZZER = afl-fuzz
 CFLAGS = -g
 
 ifeq (, $(shell which $(CC)))
-$(warning "No $(CC) in $(PATH), read README.md. Using gcc.")
+$(warning "No $(CC) in PATH, read README.md. Using gcc.")
 CC = gcc
 endif
 
